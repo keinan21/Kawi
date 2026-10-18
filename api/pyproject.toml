@@ -1,0 +1,33 @@
+[project]
+name = "lms-api"
+version = "0.1.0"
+description = "FastAPI — Assignment Integrity Form (satu proses, lihat ADR-0001)"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "sqlalchemy>=2.0.36",
+    "psycopg[binary]>=3.2.3",
+    "pydantic-settings>=2.6.0",
+    "python-multipart>=0.0.17",
+    "clerk-backend-api>=2.4.0",
+    # Pipeline AI (DESIGN.md §6): ADK runner + structured output, ekstraksi
+    # Unggahan -> markdown, dan transport LiteLLM untuk dev lokal.
+    "google-adk>=1.0.0",
+    "markitdown[pdf,pptx]>=0.1.2",
+    "litellm>=1.60.0",
+]
+
+# Proyek virtual: tidak di-build/di-install sebagai paket, hanya dependensi.
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"

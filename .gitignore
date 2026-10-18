@@ -1,0 +1,34 @@
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+.tanstack/
+
+# Env (api/.env dan web/.env.local)
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# pytest
+.pytest_cache/
+api/.pytest_cache/
+.coverage
+htmlcov/
+
+# Penyimpanan Unggahan (DESIGN.md §8)
+var/uploads/*
+!var/uploads/.gitkeep
+
+# Proses dev (dev.sh): pid file + log
+var/dev/
+
+# Artefak review/debug (tidak ikut repo)
+.playwright-mcp/
+.impeccable/review/

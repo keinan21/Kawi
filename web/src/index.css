@@ -1,0 +1,1164 @@
+/* =============================================================================
+   Adwaita — design tokens + component layer for @lms/web
+   -----------------------------------------------------------------------------
+   Visual authority: GNOME Human Interface Guidelines + libadwaita.
+   Values are transcribed from libadwaita's documented CSS variables
+   (gnome.pages.gitlab.gnome.org/libadwaita/doc/main/css-variables.html) so the
+   light and dark styles are the platform's own, not an approximation.
+
+   The structural rule that replaces the incumbent look: window / header bar /
+   sidebar / card / view are five DIFFERENT values of the same neutral, so
+   hierarchy is carried by the surface before a single word is read. In light,
+   content surfaces sit highest; in dark, they recess. Both are Adwaita's own
+   behaviour and both must render correctly.
+   ========================================================================== */
+
+@import 'tailwindcss';
+
+/* --- Lettering -------------------------------------------------------------
+   Adwaita Sans is a custom build of Inter; Inter is the same design, so it is
+   self-hosted rather than hoped for on the host OS. Cantarell and Adwaita Sans
+   stay in the stack for Linux machines that already have them. */
+
+@font-face {
+  font-family: 'Inter Var';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter-var-latin.woff2') format('woff2-variations');
+}
+@font-face {
+  font-family: 'Inter Var';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter-var-latin-italic.woff2') format('woff2-variations');
+}
+
+/* --- Raw surfaces: light style --------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  --adw-window-bg: #fafafb;
+  --adw-window-fg: rgb(0 0 6 / 80%);
+
+  --adw-view-bg: #ffffff;
+  --adw-view-fg: rgb(0 0 6 / 80%);
+
+  --adw-headerbar-bg: #ffffff;
+  --adw-headerbar-fg: rgb(0 0 6 / 80%);
+  --adw-headerbar-border: rgb(0 0 6 / 80%);
+  --adw-headerbar-backdrop: #fafafb;
+
+  --adw-sidebar-bg: #ebebed;
+  --adw-sidebar-fg: rgb(0 0 6 / 80%);
+  --adw-sidebar-border: rgb(0 0 6 / 7%);
+
+  --adw-card-bg: #ffffff;
+  --adw-card-fg: rgb(0 0 6 / 80%);
+  --adw-card-shade: rgb(0 0 6 / 7%);
+
+  --adw-dialog-bg: #fafafb;
+  --adw-dialog-fg: rgb(0 0 6 / 80%);
+
+  --adw-popover-bg: #ffffff;
+  --adw-popover-fg: rgb(0 0 6 / 80%);
+  --adw-popover-shade: rgb(0 0 6 / 7%);
+
+  --adw-accent-bg: #3584e4;
+  --adw-accent-fg: #ffffff;
+  --adw-accent-fg-text: #0461be;
+
+  --adw-success-bg: #2ec27e;
+  --adw-success-fg: #ffffff;
+  --adw-success-fg-text: #007c3d;
+
+  --adw-warning-bg: #e5a50a;
+  --adw-warning-fg: rgb(0 0 0 / 80%);
+  --adw-warning-fg-text: #905400;
+
+  --adw-error-bg: #e01b24;
+  --adw-error-fg: #ffffff;
+  --adw-error-fg-text: #c30000;
+
+  --adw-destructive-bg: #e01b24;
+  --adw-destructive-fg: #ffffff;
+  --adw-destructive-fg-text: #c30000;
+
+  --adw-shade: rgb(0 0 6 / 7%);
+  --adw-border-opacity: 15%;
+  --adw-dim-opacity: 55%;
+  --adw-disabled-opacity: 50%;
+
+  /* The neutral ramp, for the rare place a tone is needed rather than tinted. */
+  --adw-light-3: #deddda;
+  --adw-light-4: #c0bfbc;
+  --adw-light-5: #9a9996;
+}
+
+/* --- Raw surfaces: dark style ---------------------------------------------- */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-adw-style='light']) {
+    color-scheme: dark;
+
+    --adw-window-bg: #222226;
+    --adw-window-fg: #ffffff;
+
+    --adw-view-bg: #1d1d20;
+    --adw-view-fg: #ffffff;
+
+    --adw-headerbar-bg: #2e2e32;
+    --adw-headerbar-fg: #ffffff;
+    --adw-headerbar-border: #ffffff;
+    --adw-headerbar-backdrop: #222226;
+
+    --adw-sidebar-bg: #2e2e32;
+    --adw-sidebar-fg: #ffffff;
+    --adw-sidebar-border: rgb(0 0 6 / 36%);
+
+    --adw-card-bg: rgb(255 255 255 / 8%);
+    --adw-card-fg: #ffffff;
+    --adw-card-shade: rgb(0 0 6 / 36%);
+
+    --adw-dialog-bg: #36363a;
+    --adw-dialog-fg: #ffffff;
+
+    --adw-popover-bg: #36363a;
+    --adw-popover-fg: #ffffff;
+    --adw-popover-shade: rgb(0 0 6 / 25%);
+
+    --adw-accent-fg-text: #81d0ff;
+    --adw-success-bg: #26a269;
+    --adw-success-fg-text: #78e9ab;
+    --adw-warning-bg: #cd9309;
+    --adw-warning-fg-text: #ffc252;
+    --adw-error-bg: #c01c28;
+    --adw-error-fg-text: #ff938c;
+    --adw-destructive-bg: #c01c28;
+    --adw-destructive-fg-text: #ff938c;
+
+    --adw-shade: rgb(0 0 6 / 25%);
+
+    --adw-light-3: #3d3846;
+    --adw-light-4: #4f4a5c;
+    --adw-light-5: #77767b;
+  }
+}
+
+/* Explicit override, for the console's light/dark/follow-system preference. */
+:root[data-adw-style='dark'] {
+  color-scheme: dark;
+
+  --adw-window-bg: #222226;
+  --adw-window-fg: #ffffff;
+  --adw-view-bg: #1d1d20;
+  --adw-view-fg: #ffffff;
+  --adw-headerbar-bg: #2e2e32;
+  --adw-headerbar-fg: #ffffff;
+  --adw-headerbar-border: #ffffff;
+  --adw-headerbar-backdrop: #222226;
+  --adw-sidebar-bg: #2e2e32;
+  --adw-sidebar-fg: #ffffff;
+  --adw-sidebar-border: rgb(0 0 6 / 36%);
+  --adw-card-bg: rgb(255 255 255 / 8%);
+  --adw-card-fg: #ffffff;
+  --adw-card-shade: rgb(0 0 6 / 36%);
+  --adw-dialog-bg: #36363a;
+  --adw-dialog-fg: #ffffff;
+  --adw-popover-bg: #36363a;
+  --adw-popover-fg: #ffffff;
+  --adw-popover-shade: rgb(0 0 6 / 25%);
+  --adw-accent-fg-text: #81d0ff;
+  --adw-success-bg: #26a269;
+  --adw-success-fg-text: #78e9ab;
+  --adw-warning-bg: #cd9309;
+  --adw-warning-fg-text: #ffc252;
+  --adw-error-bg: #c01c28;
+  --adw-error-fg-text: #ff938c;
+  --adw-destructive-bg: #c01c28;
+  --adw-destructive-fg-text: #ff938c;
+  --adw-shade: rgb(0 0 6 / 25%);
+  --adw-light-3: #3d3846;
+  --adw-light-4: #4f4a5c;
+  --adw-light-5: #77767b;
+}
+
+/* --- Tailwind theme mapping -------------------------------------------------
+   `inline` keeps the utility emitting var(--adw-*) so both styles resolve
+   without duplicating the palette. */
+
+@theme inline {
+  --font-sans:
+    'Inter Var', 'Adwaita Sans', 'Cantarell', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Adwaita Mono', 'Inter Var', ui-monospace, 'DejaVu Sans Mono', monospace;
+
+  --color-window: var(--adw-window-bg);
+  --color-window-fg: var(--adw-window-fg);
+  --color-view: var(--adw-view-bg);
+  --color-view-fg: var(--adw-view-fg);
+  --color-headerbar: var(--adw-headerbar-bg);
+  --color-headerbar-fg: var(--adw-headerbar-fg);
+  --color-sidebar: var(--adw-sidebar-bg);
+  --color-sidebar-fg: var(--adw-sidebar-fg);
+  --color-card: var(--adw-card-bg);
+  --color-card-fg: var(--adw-card-fg);
+  --color-dialog: var(--adw-dialog-bg);
+  --color-dialog-fg: var(--adw-dialog-fg);
+  --color-popover: var(--adw-popover-bg);
+  --color-popover-fg: var(--adw-popover-fg);
+
+  --color-accent: var(--adw-accent-bg);
+  --color-accent-fg: var(--adw-accent-fg);
+  --color-accent-text: var(--adw-accent-fg-text);
+  --color-success: var(--adw-success-bg);
+  --color-success-fg: var(--adw-success-fg);
+  --color-success-text: var(--adw-success-fg-text);
+  --color-warning: var(--adw-warning-bg);
+  --color-warning-fg: var(--adw-warning-fg);
+  --color-warning-text: var(--adw-warning-fg-text);
+  --color-error: var(--adw-error-bg);
+  --color-error-fg: var(--adw-error-fg);
+  --color-error-text: var(--adw-error-fg-text);
+  --color-destructive: var(--adw-destructive-bg);
+  --color-destructive-fg: var(--adw-destructive-fg);
+  --color-destructive-text: var(--adw-destructive-fg-text);
+
+  --color-shade: var(--adw-shade);
+  --color-shade-strong: var(--adw-card-shade);
+  --color-tone-3: var(--adw-light-3);
+  --color-tone-4: var(--adw-light-4);
+  --color-tone-5: var(--adw-light-5);
+
+  --radius-window: 15px;
+  --radius-card: 15px;
+  --radius-control: 9px;
+  --radius-popover: 15px;
+  --radius-badge: 9999px;
+
+  /* 6px base scale, as libadwaita's spacing steps. */
+  --spacing: 0.25rem;
+}
+
+/* --- Base ------------------------------------------------------------------ */
+
+@layer base {
+  html {
+    /* No hard-coded font sizes on content: everything derives from the root so
+       the browser's own minimum-font setting still works. */
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--adw-window-bg);
+    color: var(--adw-window-fg);
+    font-family: var(--font-sans);
+    font-size: 0.9375rem; /* 15px — the Adwaita body size */
+    line-height: 1.5;
+    font-feature-settings: 'cv05' 1, 'cv11' 1;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Numbers that change in place must not reflow their neighbours. */
+  .angka {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  /* Browser surfaces belong to the design too: caret, selection, scrollbars. */
+  :focus-visible {
+    outline: 2px solid var(--adw-accent-bg);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--adw-accent-bg) 26%, transparent);
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
+    caret-color: var(--adw-accent-bg);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--adw-light-4) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--adw-light-4);
+    border: 3px solid transparent;
+    background-clip: content-box;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--adw-light-5);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* --- Components ------------------------------------------------------------- */
+
+@layer components {
+  /* Header bar — the three alignment points, plus guaranteed drag space. */
+  .adw-headerbar {
+    background-color: var(--adw-headerbar-bg);
+    color: var(--adw-headerbar-fg);
+    border-bottom: 1px solid var(--adw-shade);
+  }
+
+  .adw-heading {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1.2;
+  }
+
+  /* Boxed list — one card, hairline separators, 15px radius. Never a shadow
+     on top of the border; elevation is declared once. */
+  .adw-boxed {
+    background-color: var(--adw-card-bg);
+    color: var(--adw-card-fg);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+
+  .adw-boxed--framed {
+    border: 1px solid var(--adw-shade);
+  }
+
+  .adw-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 58px;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--adw-card-shade);
+    text-align: left;
+    color: inherit;
+  }
+  .adw-row:last-child {
+    border-bottom: 0;
+  }
+
+  .adw-row--tight {
+    min-height: 42px;
+  }
+
+  .adw-row--activatable {
+    cursor: pointer;
+    transition: background-color 120ms ease-out;
+  }
+  .adw-row--activatable:hover {
+    background-color: color-mix(in srgb, currentColor 6%, transparent);
+  }
+  .adw-row--activ:active {
+    background-color: color-mix(in srgb, currentColor 11%, transparent);
+  }
+
+  /* Section label inside a boxed list / view. */
+  .adw-label {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--adw-card-fg) 55%, transparent);
+  }
+
+  .adw-caption {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  .adw-dim {
+    color: color-mix(in srgb, currentColor var(--adw-dim-opacity), transparent);
+  }
+
+  /* Buttons */
+  .adw-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4375rem;
+    min-height: 34px;
+    padding: 0 0.875rem;
+    border-radius: var(--radius-control);
+    border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+    color: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background-color 120ms ease-out,
+      border-color 120ms ease-out,
+      opacity 120ms ease-out;
+    white-space: nowrap;
+  }
+  .adw-btn:hover {
+    background-color: color-mix(in srgb, currentColor 14%, transparent);
+  }
+  .adw-btn:active {
+    background-color: color-mix(in srgb, currentColor 20%, transparent);
+  }
+  .adw-btn:disabled {
+    opacity: var(--adw-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  /* Suggested and destructive carry meaning, so exactly one of each per view. */
+  .adw-btn--suggested {
+    background-color: var(--adw-accent-bg);
+    border-color: transparent;
+    color: var(--adw-accent-fg);
+    font-weight: 700;
+  }
+  .adw-btn--suggested:hover {
+    background-color: color-mix(in srgb, var(--adw-accent-bg) 85%, black);
+  }
+  .adw-btn--suggested:active {
+    background-color: color-mix(in srgb, var(--adw-accent-bg) 75%, black);
+  }
+  .adw-btn--suggested:disabled {
+    background-color: var(--adw-accent-bg);
+  }
+
+  .adw-btn--destructive {
+    background-color: var(--adw-destructive-bg);
+    border-color: transparent;
+    color: var(--adw-destructive-fg);
+    font-weight: 700;
+  }
+  .adw-btn--destructive:hover {
+    background-color: color-mix(in srgb, var(--adw-destructive-bg) 85%, black);
+  }
+  .adw-btn--destructive:disabled {
+    background-color: var(--adw-destructive-bg);
+  }
+
+  /* A pill is for a single primary action standing in open space. */
+  .adw-btn--pill {
+    border-radius: 9999px;
+    padding: 0 1.25rem;
+    min-height: 38px;
+  }
+
+  /* In a header bar, buttons lose their background and border. */
+  .adw-btn--header {
+    background-color: transparent;
+    border-color: transparent;
+    min-height: 30px;
+    padding: 0 0.5rem;
+  }
+  .adw-btn--header:hover {
+    background-color: color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  .adw-btn--quiet {
+    background-color: transparent;
+    border-color: transparent;
+  }
+  .adw-btn--quiet:hover {
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+  }
+
+  /* Circular buttons for small controls set close together. */
+  .adw-btn--circular {
+    border-radius: 9999px;
+    width: 34px;
+    min-height: 34px;
+    padding: 0;
+  }
+
+  .adw-link {
+    color: var(--adw-accent-fg-text);
+    text-decoration: underline;
+    text-underline-offset: 0.1875em;
+    text-decoration-thickness: 1px;
+    border-radius: 3px;
+  }
+  .adw-link:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  /* Text entries: sized for the likely content, label/placeholder always. */
+  .adw-field {
+    width: 100%;
+    min-height: 34px;
+    padding: 0.375rem 0.6875rem;
+    border-radius: var(--radius-control);
+    border: 1px solid color-mix(in srgb, var(--adw-window-fg) 24%, transparent);
+    background-color: var(--adw-view-bg);
+    color: var(--adw-view-fg);
+    font-size: 0.9375rem;
+    transition:
+      border-color 120ms ease-out,
+      box-shadow 120ms ease-out;
+  }
+  .adw-field::placeholder {
+    color: color-mix(in srgb, var(--adw-view-fg) 45%, transparent);
+  }
+  .adw-field:hover {
+    border-color: color-mix(in srgb, var(--adw-window-fg) 36%, transparent);
+  }
+  .adw-field:focus,
+  .adw-field:focus-visible {
+    outline: none;
+    border-color: var(--adw-accent-bg);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--adw-accent-bg) 22%, transparent);
+  }
+  .adw-field:disabled {
+    background-color: color-mix(in srgb, currentColor 6%, transparent);
+    color: color-mix(in srgb, currentColor var(--adw-disabled-opacity), transparent);
+  }
+  .adw-field[aria-invalid='true'] {
+    border-color: var(--adw-error-bg);
+  }
+  .adw-field[aria-invalid='true']:focus {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--adw-error-bg) 22%, transparent);
+  }
+
+  /* Badges — never colour alone; each carries a dot or an icon plus its label. */
+  .adw-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3125rem;
+    padding: 0.0625rem 0.5rem;
+    border-radius: var(--radius-badge);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    white-space: nowrap;
+    background-color: color-mix(in srgb, currentColor 12%, transparent);
+    color: inherit;
+  }
+  .adw-badge--accent {
+    background-color: color-mix(in srgb, var(--adw-accent-bg) 16%, transparent);
+    color: var(--adw-accent-fg-text);
+  }
+  .adw-badge--success {
+    background-color: color-mix(in srgb, var(--adw-success-bg) 18%, transparent);
+    color: var(--adw-success-fg-text);
+  }
+  .adw-badge--warning {
+    background-color: color-mix(in srgb, var(--adw-warning-bg) 22%, transparent);
+    color: var(--adw-warning-fg-text);
+  }
+  .adw-badge--error {
+    background-color: color-mix(in srgb, var(--adw-error-bg) 14%, transparent);
+    color: var(--adw-error-fg-text);
+  }
+  .adw-badge--neutral {
+    background-color: color-mix(in srgb, currentColor 10%, transparent);
+    color: color-mix(in srgb, currentColor 68%, transparent);
+  }
+
+  /* View switcher — three to five equivalent views, replaces underline tabs. */
+  .adw-switcher {
+    display: inline-flex;
+    gap: 0.125rem;
+    padding: 0.1875rem;
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+  }
+  .adw-switcher > button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 30px;
+    padding: 0 0.75rem;
+    border: 0;
+    border-radius: 9999px;
+    background-color: transparent;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 120ms ease-out;
+  }
+  .adw-switcher > button:hover {
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+  }
+  .adw-switcher > button[aria-selected='true'] {
+    background-color: var(--adw-card-bg);
+    font-weight: 700;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-adw-style='light']) .adw-switcher > button[aria-selected='true'] {
+      background-color: color-mix(in srgb, currentColor 22%, transparent);
+    }
+  }
+  :root[data-adw-style='dark'] .adw-switcher > button[aria-selected='true'] {
+    background-color: color-mix(in srgb, currentColor 22%, transparent);
+  }
+
+  /* Banner — persistent state, informal heading style, never auto-hiding. */
+  .adw-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.5rem 0.875rem;
+    border-radius: var(--radius-control);
+    background-color: color-mix(in srgb, var(--adw-warning-bg) 15%, transparent);
+    color: var(--adw-warning-fg-text);
+    font-size: 0.875rem;
+  }
+  .adw-banner--error {
+    background-color: color-mix(in srgb, var(--adw-error-bg) 12%, transparent);
+    color: var(--adw-error-fg-text);
+  }
+  .adw-banner--info {
+    background-color: color-mix(in srgb, var(--adw-accent-bg) 12%, transparent);
+    color: var(--adw-accent-fg-text);
+  }
+
+  /* Progress: the bar shows time remaining, per the HIG progress-bar rules. */
+  .adw-progress {
+    height: 6px;
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, currentColor 14%, transparent);
+    overflow: hidden;
+  }
+  .adw-progress > span {
+    display: block;
+    height: 100%;
+    border-radius: 9999px;
+    background-color: var(--adw-accent-bg);
+  }
+  /* Thin variant: background progress attached to the header bar's lower edge. */
+  .adw-progress--thin {
+    height: 3px;
+    border-radius: 0;
+  }
+
+  /* On-screen display — dark, translucent, white accent. Used for the countdown
+     overlay and the answer-timer strip. */
+  .adw-osd {
+    background-color: rgb(0 0 0 / 72%);
+    color: #ffffff;
+    backdrop-filter: blur(2px);
+  }
+
+  /* Switch — a GNOME switch, not a browser checkbox. */
+  .adw-switch {
+    position: relative;
+    flex: none;
+    width: 46px;
+    height: 26px;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--adw-window-fg) 26%, transparent);
+    background-color: color-mix(in srgb, var(--adw-window-fg) 22%, transparent);
+    cursor: pointer;
+    transition: background-color 150ms ease-out;
+  }
+  .adw-switch[aria-checked='true'] {
+    background-color: var(--adw-accent-bg);
+    border-color: transparent;
+  }
+  .adw-switch::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    border-radius: 9999px;
+    background-color: #ffffff;
+    transition: transform 150ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  .adw-switch[aria-checked='true']::after {
+    transform: translateX(20px);
+  }
+
+  /* Tooltips — GNOME shows them on hover, not on focus-delay hacks. */
+  .adw-tip {
+    position: relative;
+  }
+  .adw-tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    z-index: 60;
+    top: calc(100% + 6px);
+    left: 50%;
+    translate: -50% 0;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-control);
+    background-color: var(--adw-popover-bg);
+    color: var(--adw-popover-fg);
+    border: 1px solid var(--adw-popover-shade);
+    font-size: 0.8125rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 120ms ease-out;
+  }
+  .adw-tip:hover::after,
+  .adw-tip:focus-visible::after {
+    opacity: 1;
+  }
+
+  /* Signature move: the Integrity Rail.
+     The Sesi state machine as one continuous line. Nodes are the states,
+     reached nodes filled, and Pelanggaran marks stamped at their timestamp. */
+  .adw-rail {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+  .adw-rail::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, currentColor 14%, transparent);
+  }
+  .adw-rail > li {
+    position: relative;
+  }
+  .adw-rail > li::before {
+    content: '';
+    position: absolute;
+    left: -1.5rem;
+    top: 0.4375rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 9999px;
+    background-color: var(--adw-card-bg);
+    border: 2px solid color-mix(in srgb, currentColor 22%, transparent);
+  }
+  .adw-rail > li[data-reached='true']::before {
+    border-color: transparent;
+  }
+  .adw-rail > li[data-tone='neutral']::before {
+    background-color: var(--adw-light-4);
+  }
+  .adw-rail > li[data-tone='accent']::before {
+    background-color: var(--adw-accent-bg);
+  }
+  .adw-rail > li[data-tone='warning']::before {
+    background-color: var(--adw-warning-bg);
+  }
+  .adw-rail > li[data-tone='success']::before {
+    background-color: var(--adw-success-bg);
+  }
+  .adw-rail > li[data-tone='error']::before {
+    background-color: var(--adw-error-bg);
+  }
+
+  /* A Pelanggaran stamped onto the rail, at the position it happened. */
+  .adw-rail-mark {
+    position: relative;
+  }
+  .adw-rail-mark::before {
+    content: '';
+    position: absolute;
+    left: -1.5rem;
+    top: 0.25rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 9999px;
+    background-color: var(--adw-error-bg);
+    box-shadow: 0 0 0 3px var(--adw-card-bg);
+  }
+
+  /* Keyboard access-key underline, shown only while Alt is held. */
+  .alt-torch [data-accesskey]::first-letter {
+    text-decoration: underline;
+  }
+
+  /* ===========================================================================
+     Landing page.
+
+     A marketing surface inside the Adwaita world, not a world of its own. It
+     inherits every token above and adds only what a long-form page needs: a
+     measure, a display step, the framed-figure chrome the feature rows are
+     built from, and the dark session panel.
+
+     The five-value neutral rule still holds, which is why the figures sit on
+     `view` and the closer on `sidebar` rather than inventing a sixth surface.
+     ========================================================================= */
+
+  /* One container for the whole page. */
+  .lp-shell {
+    width: 100%;
+    max-width: 75rem; /* 1200px */
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 40rem) {
+    .lp-shell {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Vertical rhythm: one value, used by every section boundary. */
+  .lp-sek {
+    padding-block: clamp(3.5rem, 6.5vw, 6rem);
+  }
+  .lp-sek--rapat {
+    padding-block: clamp(2.75rem, 4.5vw, 4rem);
+  }
+
+  /* Secondary prose.
+     `.adw-dim` is the platform's disabled/caption tone and composites to about
+     3.2:1 on the window ground — fine for an app's incidental text, not for a
+     paragraph a visitor is being asked to read. This is the same hue at the
+     level that clears 4.5:1 in light and stays well clear in dark, so the page
+     can be read without also changing the console's existing tone. */
+  .lp-dim {
+    color: color-mix(in srgb, currentColor 72.5%, transparent);
+  }
+  .lp-label {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: color-mix(in srgb, currentColor 72.5%, transparent);
+  }
+
+  /* Display step. Tracking stops well short of the -0.04em floor. */
+  .lp-display {
+    font-size: clamp(2.125rem, 1.35rem + 3.3vw, 3.4rem);
+    line-height: 1.06;
+    letter-spacing: -0.025em;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+
+  .lp-h2 {
+    font-size: clamp(1.5rem, 1.1rem + 1.7vw, 2.125rem);
+    line-height: 1.16;
+    letter-spacing: -0.018em;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+
+  .lp-h3 {
+    font-size: 1.1875rem;
+    line-height: 1.25;
+    letter-spacing: -0.008em;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+
+  /* Measure: 65-75ch for prose, tighter for the hero lead. */
+  .lp-prose {
+    max-width: 68ch;
+    text-wrap: pretty;
+  }
+  .lp-lead {
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+    line-height: 1.55;
+    max-width: 56ch;
+    text-wrap: pretty;
+  }
+
+  /* The primary action at marketing scale: a pill, one per viewport. */
+  .lp-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding-inline: 1.5rem;
+    border-radius: 9999px;
+    border: 1px solid transparent;
+    background-color: var(--adw-accent-bg);
+    color: var(--adw-accent-fg);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    white-space: nowrap;
+    transition:
+      background-color 120ms ease-out,
+      transform 120ms ease-out;
+  }
+  .lp-cta:hover {
+    background-color: color-mix(in srgb, var(--adw-accent-bg) 85%, black);
+  }
+  .lp-cta:active {
+    background-color: color-mix(in srgb, var(--adw-accent-bg) 75%, black);
+    transform: translateY(1px);
+  }
+  .lp-cta--riuh {
+    min-height: 3rem;
+    padding-inline: 1.875rem;
+    font-size: 1rem;
+  }
+
+  /* --- Figure chrome -------------------------------------------------------
+     The feature rows' visuals are live DOM, not screenshots: a window ground,
+     a header-bar strip with real window controls, and a body on `view`. */
+
+  .lp-figur {
+    background-color: var(--adw-view-bg);
+    color: var(--adw-view-fg);
+    border: 1px solid var(--adw-shade);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+  .lp-figur__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.25rem;
+    padding-inline: 0.875rem;
+    background-color: var(--adw-headerbar-bg);
+    border-bottom: 1px solid var(--adw-shade);
+  }
+  /* Window controls are three shapes, matching the HIG's minimise/maximise/close. */
+  .lp-figur__titik {
+    width: 9px;
+    height: 9px;
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, currentColor 22%, transparent);
+  }
+  .lp-figur__badan {
+    padding: 1.125rem;
+  }
+  .lp-figur__kaki {
+    padding: 0.75rem 1.125rem;
+    border-top: 1px solid var(--adw-card-shade);
+    background-color: color-mix(in srgb, currentColor 3%, transparent);
+  }
+
+  /* --- The one dark surface ----------------------------------------------
+     The locked session, as the Murid sees it. `.adw-osd` is GNOME's on-screen
+     display; on this page it appears exactly once, in the hero, over a known
+     window ground — so its translucency composites to a fixed value and the
+     contrast below is deterministic. */
+
+  .lp-osd {
+    --lp-osd-lembut: rgb(255 255 255 / 0.13);
+    --lp-osd-kartu: rgb(255 255 255 / 0.07);
+    /* The dark style's accent text, so accent copy inside stays ≥ 7:1. */
+    --adw-accent-fg-text: #81d0ff;
+    --adw-warning-fg-text: #ffc252;
+    background-color: rgb(0 0 0 / 78%);
+    color: #ffffff;
+    backdrop-filter: blur(3px);
+  }
+  .lp-osd-dim {
+    color: rgb(255 255 255 / 0.85);
+  }
+  .lp-osd-kartu {
+    background-color: var(--lp-osd-kartu);
+    border: 1px solid var(--lp-osd-lembut);
+    border-radius: var(--radius-control);
+  }
+
+  /* --- The round trip, horizontally ---------------------------------------
+     The Integrity Rail turned on its side: the state machine is one unbroken
+     line, reached states filled, and the auto-submit branch leaves the line. */
+
+  .lp-relai {
+    display: grid;
+    gap: 0;
+    counter-reset: langkah;
+  }
+  @media (min-width: 56rem) {
+    .lp-relai {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .lp-relai__simpul {
+    position: relative;
+  }
+  /* Stacked: the line runs down the left, GNOME rail style, and the copy
+     clears the node. */
+  @media (max-width: 55.999rem) {
+    .lp-relai__simpul {
+      padding: 0 0 1.75rem 1.75rem;
+    }
+    .lp-relai__simpul::before {
+      content: '';
+      position: absolute;
+      left: 0.375rem;
+      top: 0.9375rem;
+      bottom: 0;
+      width: 2px;
+      border-radius: 9999px;
+      background-color: var(--lp-relai-garis);
+    }
+    .lp-relai__simpul:last-child {
+      padding-bottom: 0;
+    }
+    .lp-relai__simpul:last-child::before {
+      content: none;
+    }
+  }
+  /* Four across: the line starts just past the node and runs to the end of
+     this column, so the next node closes the gap. No masking plate to drift. */
+  @media (min-width: 56rem) {
+    .lp-relai__simpul {
+      padding: 1.5rem 1.25rem 0 0;
+    }
+    .lp-relai__simpul::before {
+      content: '';
+      position: absolute;
+      left: 1.25rem;
+      top: 0.375rem;
+      right: 0;
+      height: 2px;
+      border-radius: 9999px;
+      background-color: var(--lp-relai-garis);
+    }
+    .lp-relai__simpul:last-child::before {
+      content: none;
+    }
+  }
+  .lp-relai__titik {
+    position: relative;
+    z-index: 1;
+    width: 0.875rem;
+    height: 0.875rem;
+    border-radius: 9999px;
+    background-color: var(--adw-accent-bg);
+    box-shadow: 0 0 0 3px var(--lp-relai-lat);
+  }
+  .lp-relai__cabang {
+    display: block;
+    margin-top: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-control);
+    background-color: color-mix(in srgb, var(--adw-warning-bg) 16%, transparent);
+    color: var(--adw-warning-fg-text);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  /* Honest list: a claim and its consequence, hairline separated. Not a card
+     grid — a statement and its rebuttal on the same baseline. */
+  .lp-klaim {
+    display: flex;
+    gap: 0.75rem;
+    padding-block: 0.875rem;
+    border-bottom: 1px solid var(--adw-shade);
+  }
+  .lp-klaim:last-child {
+    border-bottom: 0;
+  }
+
+  /* Screen-reader-only, for labels the layout carries visually elsewhere. */
+  .lp-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Anchor targets sit below the sticky bar without a scroll jump. */
+  .lp-jangkar {
+    scroll-margin-top: 5rem;
+  }
+
+  /* Footer: dense on purpose, and on `sidebar` so the page ends on a
+     different neutral from the body it closes. */
+  .lp-kaki {
+    background-color: var(--adw-sidebar-bg);
+    color: var(--adw-sidebar-fg);
+    border-top: 1px solid var(--adw-shade);
+  }
+  .lp-kaki a {
+    color: inherit;
+    text-decoration: none;
+    border-radius: 3px;
+  }
+  .lp-kaki a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.1875em;
+  }
+}
+
+/* The round trip's own ground colours, resolved once per style. */
+:root {
+  --lp-relai-lat: var(--adw-window-bg);
+  --lp-relai-garis: color-mix(in srgb, var(--adw-window-fg) 16%, transparent);
+}
+:root[data-adw-style='dark'] {
+  --lp-relai-lat: #222226;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-adw-style='light']) {
+    --lp-relai-lat: #222226;
+  }
+}
+:root[data-adw-style='dark'] .lp-figur {
+  --lp-relai-lat: #222226;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .adw-entrance {
+    animation: adw-rise 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes adw-rise {
+    from {
+      opacity: 0;
+      translate: 0 6px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  /* The page's one authored moment: the AI asking, in order. The three question
+     cards arrive out of focus and settle, staggered, inside the locked session.
+     Nothing else on the page animates — a second effect here would dilute it.
+
+     `both` ends on the visible state, so the element is never left hidden if a
+     capture races the entrance. */
+  .lp-tanya {
+    animation: lp-muncul 460ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .lp-tanya:nth-of-type(2) {
+    animation-delay: 120ms;
+  }
+  .lp-tanya:nth-of-type(3) {
+    animation-delay: 240ms;
+  }
+  .lp-osd .adw-progress > span {
+    animation: lp-isi 1100ms cubic-bezier(0.16, 1, 0.3, 1) 360ms both;
+  }
+  @keyframes lp-muncul {
+    from {
+      opacity: 0;
+      translate: 0 12px;
+      filter: blur(4px);
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+      filter: blur(0);
+    }
+  }
+  @keyframes lp-isi {
+    from {
+      width: 0;
+    }
+  }
+}

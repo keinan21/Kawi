@@ -1,0 +1,14 @@
+{
+  "name": "lms",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.32.1",
+  "scripts": {
+    "dev": "concurrently -n web,api -c cyan,magenta \"pnpm --filter @lms/web dev\" \"uv run --directory api uvicorn --app-dir src api.main:app --reload --port 8000\"",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
