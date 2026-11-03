@@ -6,18 +6,22 @@ import { TombolDashboard } from './TombolDashboard'
 import { ekstrakTokenTugas } from './tautan'
 
 /**
- * The first viewport: one decision, in two weights.
+ * Viewport pertama: satu keputusan, dua bobot.
  *
- * The primary action is `TombolDashboard` — the page's single suggested
- * pill, large and stable in position (Fitts's law). Below it, the Murid's
- * link field lives inside its own bounded `Kotak`, visually subordinate: a
- * quiet region that reads as "a field", never as a second button competing
- * for attention (Common Region + Similarity). Together they are the only two
- * choices above the fold (Hick's law: choice count here is exactly 2).
+ * Aksi utama `TombolDashboard` — pil satu-satunya di halaman ini, besar dan
+ * stabil posisinya (Hukum Fitts), dan satu-satunya kontrol yang boleh punya
+ * alas keras agar terasa bisa ditekan. Di bawahnya, kolom link Murid tinggal
+ * di dalam `Kotak` berbatas miliknya sendiri: region yang terbaca sebagai
+ * "kolom", bukan tombol kedua (Common Region, Similarity). Keduanya adalah
+ * satu-satunya pilihan di lipatan pertama (Hukum Hick: tepat 2).
  *
- * Right of the offer, the locked session as the Murid will meet it — the
- * page's one dark surface and its one visual anchor. Everything else on the
- * page recedes behind it (Prägnanz / Figure–Ground).
+ * Latar datar. Skill melarang gradien latar; warna halaman dibawa oleh blok
+ * (kartu pertanyaan, lencana langkah, band penutup), bukan oleh cahaya di
+ * belakang teks. Heading memakai satu-satunya gradien yang diizinkan: pada
+ * teksnya sendiri, dari warna dasar ke 40% nya (aturan B5).
+ *
+ * Di kanan, Sesi terkunci persis seperti yang ditemui Murid — satu permukaan
+ * gelap, satu jangkar visual, bernapas pelan. Yang lain mundur (Prägnanz).
  */
 export function HeroLanding() {
   const navigate = useNavigate()
@@ -39,30 +43,33 @@ export function HeroLanding() {
   }
 
   return (
-    <section className="lp-shell lp-sek--rapat pt-10 pb-12 sm:pt-14 lg:pt-20 lg:pb-16">
-      <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-14">
-        {/* --- The offer ---------------------------------------------------- */}
+    <section className="lp-shell lp-sek--rapat pt-10 pb-12 sm:pt-16 lg:pt-20 lg:pb-16">
+      <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
+        {/* --- Tawaran --------------------------------------------------------- */}
         <div className="min-w-0">
-          <h1 className="lp-display">
-            Tiga pertanyaan, semuanya dari karya Murid sendiri.
+          <h1 className="lp-display lp-display-hero max-w-[680px]">
+            Pastikan murid benar-benar paham tugasnya.
           </h1>
 
-          <p className="lp-lead mt-5 lp-dim">
-            Guru membuat satu Tugas dan membagikan satu link. Murid mengunggah
-            satu berkas, lalu menjawab tiga pertanyaan yang disusun dari isi
-            berkas itu.
+          <p className="lp-lead lp-dim mt-4">
+            Satu link Tugas. Murid mengunggah satu berkas, lalu menjawab tiga
+            pertanyaan yang disusun dari karyanya sendiri, masing-masing dengan
+            kutipan yang bisa Guru cek.
           </p>
 
           <div className="mt-8">
-            <TombolDashboard />
+            <TombolDashboard kelas="lp-cta lp-chunky" />
           </div>
+          <p className="adw-caption lp-dim mt-4">
+            Tanpa instalasi · satu link · satu berkas
+          </p>
 
-          {/* The Murid's entry, in its working form: a field that resolves,
-              boxed off from the action above so the two never read as peers. */}
-          <Kotak dibingkai className="mt-4">
-            <form onSubmit={kirim} className="p-3.5">
-              <label htmlFor="link-tugas" className="lp-label mb-1.5 block">
-                Punya link Tugas?
+          {/* Pintu masuk Murid, dalam bentuknya yang bekerja: kolom yang
+              menyelesaikan link, dibingkai terpisah dari aksi di atasnya. */}
+          <Kotak dibingkai className="mt-6">
+            <form onSubmit={kirim} className="p-3">
+              <label htmlFor="link-tugas" className="lp-label mb-2 block">
+                Murid? Tempel link dari gurumu
               </label>
               <div className="flex flex-col gap-2 sm:flex-row">
                 <input
@@ -74,7 +81,7 @@ export function HeroLanding() {
                   autoComplete="off"
                   spellCheck={false}
                   aria-invalid={galat ? 'true' : undefined}
-                  aria-describedby={galat ? 'galat-link' : 'petunjuk-link'}
+                  aria-describedby={galat ? 'galat-link' : undefined}
                   className="adw-field"
                 />
                 <button type="submit" className="adw-btn flex-none">
@@ -85,26 +92,18 @@ export function HeroLanding() {
                 <p
                   id="galat-link"
                   role="alert"
-                  className="mt-2 text-[0.8125rem] text-pretty text-error-text"
+                  className="mt-2 text-xs text-pretty text-error-text"
                 >
                   {galat}
                 </p>
-              ) : (
-                <p id="petunjuk-link" className="adw-caption lp-dim mt-2 text-pretty">
-                  Kode di belakang /t/ juga bisa ditempel langsung.
-                </p>
-              )}
+              ) : null}
             </form>
           </Kotak>
         </div>
 
-        {/* --- The mechanism, shown ------------------------------------------ */}
-        <div className="min-w-0">
+        {/* --- Mekanismenya, ditampilkan --------------------------------------- */}
+        <div className="lp-float min-w-0">
           <PanelSesi />
-          <p className="adw-caption lp-dim mt-3 text-pretty">
-            Contoh tampilan Murid setelah mengunggah: Sesi terkunci dan tiga
-            pertanyaan yang disusun dari karyanya sendiri.
-          </p>
         </div>
       </div>
     </section>

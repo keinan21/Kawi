@@ -2,48 +2,45 @@ import { Ikon } from '@/components/adw/ikon'
 import { TombolDashboard } from './TombolDashboard'
 
 /**
- * The close, and the footer under it.
+ * Penutup, dan footer di bawahnya.
  *
- * One band on `sidebar` — a different value of the same neutral, never the
- * accent colour (white on Adwaita blue only reaches 3.8:1). It carries the
- * whole honest boundary in two paragraphs: deterrence plus audit trail, not
- * prevention — and Penilaian AI as a signal, not a verdict. The two-column
- * "claimed / not claimed" band is gone; its essential lines live here, next
- * to the decision they justify (Proximity).
+ * Satu band dengan volume penuh: biru Adwaita yang lebih dalam, datar — putih
+ * hanya mencapai 3.8:1 pada langkah aksen, dan 6.3:1 pada langkah ini. Halaman
+ * berakhir dengan energi, bukan memudar, dan band ini mengulang aksi utama
+ * halaman dengan label dan tujuan yang identik (Similarity): penampakan
+ * ketiga, dan yang kedua bisa ditindaklanjuti.
  *
- * The band repeats the page's one primary action, identical in label and
- * destination (Similarity) — the last of at most three sightings, and the
- * second the visitor can act on. The footer below is a single quiet column:
- * identity, one honest line, two anchors, and the attributions the page owes.
+ * Batas jujur tetap ada, karena ia bagian dari tawaran, bukan cetak kaki:
+ * deterrensi plus jejak audit, bukan pencegahan; Penilaian AI sinyal bantu,
+ * bukan vonis. Footer di bawahnya satu kolom tenang: identitas, satu baris
+ * jujur, dua jangkar, dan atribusi yang produk ini hutang.
  */
 export function PenutupLanding() {
   return (
     <>
-      <section
-        id="batas"
-        aria-labelledby="judul-batas"
-        className="lp-jangkar lp-shell lp-sek border-t border-shade"
-      >
-        <div className="rounded-card bg-sidebar px-6 py-10 text-sidebar-fg sm:px-10 sm:py-14">
-          <div className="max-w-[68ch]">
+      <section id="batas" aria-labelledby="judul-batas" className="lp-jangkar lp-pita">
+        <div className="lp-shell py-16 sm:py-20">
+          <div className="max-w-[62ch]">
             <h2 id="judul-batas" className="lp-h2">
-              Batasnya disebut di awal
+              Siap mencoba?
             </h2>
-            <p className="lp-prose lp-dim mt-3">
+            <p className="lp-lead mt-3">
+              Buat tugas pertamamu dalam semenit. Murid cukup membuka satu link.
+            </p>
+            <div className="mt-8">
+              <TombolDashboard
+                kelas="lp-cta lp-chunky lp-chunky--terang"
+                denganIkon={false}
+              />
+            </div>
+            <p className="mt-6 max-w-[68ch] text-base leading-6 text-pretty text-white/85">
               Produk ini tidak mencegah menyontek — tidak ada yang bisa. Yang
               dikerjakan adalah deterrensi plus jejak audit: setiap gangguan
-              dicatat dengan waktunya dari server, dan riwayat setiap percobaan
-              tersimpan. Izin Unggah Ulang menambah percobaan baru, bukan
-              menghapus yang lama.
+              dicatat dari server, dan setiap percobaan tersimpan. Izin Unggah
+              Ulang menambah percobaan baru, bukan menghapus yang lama. Penilaian
+              AI adalah sinyal bantu untuk membaca jawaban, bukan vonis — nilai
+              akhir tetap keputusan Guru, dan Murid tidak pernah melihat skor.
             </p>
-            <p className="lp-prose lp-dim mt-3">
-              Penilaian AI adalah sinyal bantu untuk membaca jawaban, bukan
-              vonis. Nilai akhir tetap keputusan Guru, dan Murid tidak pernah
-              melihat skor.
-            </p>
-            <div className="mt-7">
-              <TombolDashboard />
-            </div>
           </div>
         </div>
       </section>
@@ -57,7 +54,7 @@ export function PenutupLanding() {
             >
               <Ikon nama="tDicek" ukuran={14} />
             </span>
-            <span className="text-[0.9375rem] font-bold tracking-tight">
+            <span className="text-base font-bold tracking-tight">
               Assignment Integrity Form
             </span>
           </div>
@@ -66,9 +63,9 @@ export function PenutupLanding() {
             <a href="#alur">Cara kerja</a> · <a href="#batas">Batas</a>
           </p>
 
-          {/* Attribution the icon theme's COPYING asks for, and the decision
-              that governs how this product is allowed to talk about itself. */}
-          <div className="mt-6 border-t border-shade pt-5">
+          {/* Atribusi yang diminta COPYING tema ikon, dan keputusan yang
+              mengatur bagaimana produk ini boleh berbicara tentang dirinya. */}
+          <div className="mt-6 border-t border-shade pt-4">
             <p className="adw-caption lp-dim m-0 max-w-[72ch] text-pretty">
               Ikon simbolik dari{' '}
               <a
@@ -83,7 +80,7 @@ export function PenutupLanding() {
             <p className="adw-caption lp-dim mt-2 m-0 max-w-[72ch] text-pretty">
               Penguncian Sesi adalah deterrensi dan jejak audit, bukan pencegahan —
               lihat{' '}
-              <code className="rounded bg-[color-mix(in_srgb,currentColor_10%,transparent)] px-1 py-0.5 text-[0.75rem]">
+              <code className="rounded bg-[color-mix(in_srgb,currentColor_10%,transparent)] px-1 py-0.5 text-xs">
                 docs/adr/0001
               </code>
               .

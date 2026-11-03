@@ -169,68 +169,103 @@ Multi-Guru management · notifikasi email · permintaan izin dari Murid · expor
 
 ## 11. Halaman awal (route `/`)
 
-Mode **Persuade**, dengan satu titik keputusan. Section-nya di
-`web/src/components/landing/`. Rute ini punya shell sendiri — header bar
-`__root` menyingkir di `/` supaya tidak ada dua baris identitas dalam satu
-layar.
+Mode **Persuade**: satu tawaran, satu audiens, satu aksi utama. Dibangun
+mengikuti skill `landing-page-design` dari `elayadesign/ai-design-skills` —
+Part A (struktur dan copy) dipakai utuh, Part B (sistem visual) dipakai dengan
+keputusan **Campuran**: font dan ikon tetap Adwaita demi satu rupa produk,
+aturan skill lainnya patuh. Section-nya di `web/src/components/landing/`.
 
-**Satu aksi utama, satu aksi pendamping.** Seluruh halaman menawarkan SATU aksi
-utama — `TombolDashboard` (`landing/TombolDashboard.tsx`), dengan label dan
-tujuan yang identik di header bar, hero, dan penutup. Pengunjung yang sudah
-masuk langsung ke `/guru`; yang belum lewat rute `/masuk` khusus dengan
-`redirect=/guru` — tidak ada modal Clerk yang dibuka dari halaman ini, jadi
-tidak pernah ada dua pintu. Satu-satunya pilihan kedua adalah kolom link Tugas
-di hero (Murid menempel link, `ekstrakTokenTugas` menyelesaikannya ke
-`/t/$token`): sebuah region berbatas yang terbaca sebagai "kolom", bukan
-sebagai tombol kedua. Kata "Masuk" tidak muncul di halaman ini; tidak ada
-tombol "Buka Konsol" yang melewati `/masuk`.
+**Nav universal, bukan nav landing.** Halaman ini tidak punya header sendiri.
+Satu bar aplikasi (`components/app/BarApp.tsx`) dipasang shell root untuk
+**semua** rute: identitas di start, judul tampilan di tengah, aksi tampilan +
+pemilih gaya + akun di end. View mengisi slot lewat portal `<IsiBar/>`, jadi
+dua bar tidak mungkin menumpuk. Permukaan bar translusen 82% + blur 12px.
+Belum masuk ada tombol **Masuk** biru di ujung bar (ke `/masuk?redirect=…`);
+sudah masuk ada email + avatar Clerk. Status login selalu terbaca.
 
-**Tiga blok, satu jangkar visual.** Urutannya: tawarkan (hero + panel Sesi
-terkunci sebagai satu-satunya permukaan gelap) → jelaskan alurnya
-(Integrity Rail + tiga tipe pertanyaan dalam satu daftar berkotak) → akui
-batasnya lalu minta tindakan (penutup di atas `sidebar`). Yang sengaja
-dibuang: section per peran dengan role switcher (akun kini dual-role, jadi
-"pilih peran" bertentangan dengan produk), kolom ganda "dikerjakan / tidak
-diklaim" (intinya dilipat ke penutup), dan panel-panel mock yang mengulang apa
-yang sudah dikatakan rail (`PanelKonsol` + `BarisMekanisme` dihapus;
-`PanelSesi` bertahan sebagai jangkar tunggal).
+**Urutan section** (skill A2, dibangun per A6): hero → tagline reveal (B11,
+wajib) → manfaat (5 baris) → cara kerja (3 langkah bernomor warna + 3 kartu
+tipe pertanyaan berbentuk) → tanya jawab (10, `<details>`) → band penutup
+biru penuh → footer. Bukti sosial sengaja tidak ada: tidak ada bahan nyata,
+dan B8 melarang mengarang.
 
-**Prinsip Gestalt yang dipakai** (terlihat di kode sebagai komentar juga):
+**Satu aksi utama.** `TombolDashboard` — label dan tujuan identik di hero dan
+band penutup (Similarity). Sudah masuk → `/guru`; belum → `/masuk?redirect=/guru`;
+tidak pernah modal Clerk. Pilihan kedua satu-satunya: kolom link Tugas di hero,
+di dalam `Kotak` berbatas sendiri (Common Region). Pilihan di lipatan pertama
+tepat 2 (Hick).
 
-| Prinsip | Di mana terlihat |
-|---|---|
-| Common Region | kolom link Tugas di dalam `Kotak` berbatas miliknya sendiri |
-| Similarity | `TombolDashboard` dipakai tiga kali tanpa variasi label/tujuan; tiga baris tipe pertanyaan diperlakukan identik |
-| Proximity | judul + teks pendukung rapat (`mt-2`/`mt-3`); jarak besar hanya antar blok (`lp-sek`) |
-| Common Fate / Continuity | satu tepi teks kiri untuk semua prosa (`lp-prose`), satu ritme vertikal |
-| Prägnanz / Figure–Ground | satu jangkar (panel Sesi); header bar tidak menyaingi hero |
-| Closure | rail tetap satu garis utuh tanpa dekorasi pemecah |
-| Hick | pilihan di viewport pertama tepat 2 (aksi utama + kolom link) |
-| Fitts | target utama besar (`lp-cta--riuh`) dan stabil di posisinya |
+**Sistem visual (Part B versi Campuran).**
+
+- **Tipe**: satu typeface (Adwaita Sans). Semua ukuran di snap ke langkah
+  Tailwind — `lp-display` = text-5xl/6xl, `lp-h2` = text-4xl/5xl,
+  `lp-h3` = text-3xl, `lp-lead` = text-lg, `lp-label` = text-xs; semua
+  semibold. Tidak ada ultra-bold (maks 700), tidak ada italic, tidak ada
+  nilai arbitrer.
+- **Warna**: heading hero memakai satu-satunya gradien yang diizinkan — pada
+  teksnya, dari warna dasar ke 40% nya (B5). Latar datar; tidak ada gradien
+  latar di mana pun (B4). Blok warna memakai palet Adwaita sendiri:
+  `--lp-biru/hijau/kuning/oranye/ungu`.
+- **Spacing** hanya dari tabel skill (2/4/8/12/16/24/32/40/48/64/80/96px).
+  Radius bersarang mengikuti rumus (hasil ≤ 2px dibiarkan kotak).
+- **Gerak**: kurva dasar `cubic-bezier(0.22,1,0.36,1)`, hanya `transform` dan
+  `opacity`. Reveal section via IntersectionObserver (`Reveal.tsx` — naik
+  32px + fade 700ms, sekali, tidak diputar ulang). Tagline aktif per kata
+  saat melintasi garis pemicu (`TaglineLanding.tsx` — 30% opasitas → penuh).
+  `prefers-reduced-motion`: keadaan final seketika, timer berhenti di 10:00,
+  napas panel dimatikan.
+- **Panel Sesi** (`.lp-osd`) tetap satu-satunya permukaan gelap, di hero,
+  berlabel "contoh" lewat `figcaption`. Timer-nya **benar-benar berdetak**
+  (cincin SVG menyusut; loop ke 10:00, tidak berhenti di 00:00). Digit
+  berjalan `aria-hidden`; aturan 10 menit dinyatakan sekali, statis.
+- **`lp-chunky`**: bold 700, alas keras 4px yang hilang saat ditekan —
+  penyimpangan HIG yang disepakati pengguna, hanya pada satu tombol utama
+  per section, tidak pernah jadi tekstur halaman.
+
+**Copy jujur.** Tidak ada testimoni, logo, atau angka pelanggan. Angka yang
+muncul hanya parameter produk (1 berkas, 3 pertanyaan, 10 menit, 5 detik).
+FAQ menjawab keberatan nyata dengan kebenaran produk: deterrensi bukan
+pencegahan, Penilaian AI sinyal bukan vonis, timer baru jalan setelah
+Unggahan diterima, Izin Unggah Ulang menambah percobaan tanpa menghapus.
+
+**Prinsip Gestalt yang dipakai** (komentar di kode juga): Common Region
+(kolom link dalam `Kotak` berbatas), Similarity (aksi utama identik di dua
+tempat; tiga langkah dan tiga kartu diperlakukan identik), Proximity (klaim
+dan buktinya rapat dalam satu baris; jarak besar hanya antar section),
+Common Fate/Continuity (satu tepi kiri, satu ritme vertikal), Prägnanz
+(satu jangkar visual: panel Sesi), Closure (tiap kartu tipe pertanyaan
+terbaca utuh: bentuk + nama + isi), Hick (2 pilihan di lipatan pertama),
+Fitts (aksi utama besar, posisi stabil).
 
 | Token | Arti |
 |---|---|
 | `.lp-shell` | satu container 1200px untuk seluruh halaman |
-| `.lp-sek` / `.lp-sek--rapat` | ritme vertikal; satu nilai untuk semua batas section |
-| `.lp-display` / `.lp-h2` / `.lp-h3` | langkah tipografi; tracking berhenti jauh sebelum lantai -0.04em |
-| `.lp-prose` / `.lp-lead` | measure 68ch / 56ch |
+| `.lp-sek` / `.lp-sek--rapat` | ritme vertikal; endpoint pada langkah spacing (64/96 dan 32/48) |
+| `.lp-display` / `.lp-h2` / `.lp-h3` | Heading 1/2/3 versi skill (text-5xl→6xl / 4xl→5xl / 3xl), semibold |
+| `.lp-display-hero` | gradien dua nada pada teks heading hero (B5) — satu-satunya gradien di halaman |
+| `.lp-lead` / `.lp-prose` | text-lg medium, max 680px / measure 68ch |
 | `.lp-dim` / `.lp-label` | **teks sekunder yang boleh dibaca** — lihat catatan kontras di bawah |
-| `.lp-cta` | pill; dipakai untuk aksi utama yang SATU itu (boleh diulang identik di penutup) |
-| `.lp-figur*` | (tidak dipakai halaman ini lagi — tersisa untuk panel konsol bila perlu) |
-| `.lp-osd*` | satu-satunya permukaan gelap di halaman: panel Sesi di hero |
-| `.lp-relai*` | Integrity Rail yang diletakkan mendatar |
-| `.lp-klaim` | (dihapus bersama section perannya — riwayat klaim kini prosa penutup) |
-| `.lp-kaki` | footer; penutup memakai `sidebar`, nilai netral berbeda dari badan halaman |
+| `.lp-cta` / `.lp-cta--riuh` | Button-lg pill; aksi utama yang SATU |
+| `.lp-chunky` / `.lp-chunky--terang` | alas keras 4px pada satu tombol utama; varian putih untuk band biru |
+| `.lp-reveal` | reveal section: naik 32px + fade 700ms, sekali, via IntersectionObserver |
+| `.lp-tagline__kata` | kata tagline: 30% → penuh saat melintasi garis pemicu (B11) |
+| `.lp-kartu*` / `.lp-bentuk*` | tiga kartu tipe pertanyaan + bentuk segitiga/belah kupat/lingkaran |
+| `.lp-manfaat` | baris manfaat: klaim tebal + bukti, pemisah garis tipis |
+| `.lp-faq` | baris tanya jawab (`<details>`), tanpa JavaScript |
+| `.lp-pita` | band penutup biru datar `--lp-biru-tua` (white body copy 6.3:1) |
+| `.lp-osd*` | satu-satunya permukaan gelap: panel Sesi di hero |
+| `.lp-sr` / `.lp-jangkar` / `.lp-kaki` | sr-only / scroll-margin / footer |
 
 **Aturan yang tidak boleh dilanggar di halaman ini**:
 
 1. **Satu permukaan gelap saja, sekali pakai** — panel Sesi terkunci di hero. Section lain tidak boleh memakai `.lp-osd`.
-2. **Nilai ilustrasi harus berlabel.** Tidak ada pelanggan, tidak ada metrik, tidak ada testimoni (lihat *Evidence on Hand* di PRODUCT.md). Panel Sesi menampilkan data contoh, dan caption hero menyebutnya secara terbuka.
-3. **Gambar fitur adalah DOM hidup, bukan screenshot.** Itu yang membuat halaman bisa menunjukkan produknya tanpa satu pun raster, tetap mengikuti light/dark, dan tetap terbaca screen reader.
-4. **Tidak ada kicker/eyebrow, tidak ada nomor section, tidak ada baris kartu ikon-berteks** sebagai struktur halaman.
-5. **Satu `<h1>`, urutan heading logis, semua aksi reachable keyboard** dengan focus ring bawaan; target anchor yang dipertahankan (`#alur`, `#batas`) wajib punya id; tidak ada heading yatim dari pola CTA yang dihapus.
+2. **Nilai ilustrasi harus berlabel.** Panel Sesi menampilkan data contoh, dan `figcaption`-nya menyebutnya secara terbuka.
+3. **Gambar fitur adalah DOM hidup, bukan screenshot.** Tanpa raster, tetap mengikuti light/dark, tetap terbaca screen reader.
+4. **Satu `<h1>`, urutan heading logis, semua aksi reachable keyboard** dengan focus ring bawaan; anchor (`#alur`, `#manfaat`, `#faq`, `#batas`) wajib punya id; tidak ada heading yatim.
+5. **Warna tidak pernah jadi satu-satunya penanda makna** — bentuk pada kartu tipe pertanyaan selalu berpasangan dengan teks tipenya.
+6. **Tidak ada dead link** dan tidak ada tombol ke `#`.
 
-**Catatan kontras (penting).** `--adw-dim-opacity: 55%` milik libadwaita berkomposisi ke **±3.2:1** di atas `window` — cukup untuk teks insidental di aplikasi, tidak cukup untuk paragraf yang diminta untuk dibaca. Karena itu landing punya `.lp-dim` (72.5% → ±5.3:1 light, ±8.9:1 dark) dan landing **tidak** memakai `.adw-dim` untuk body. Konsol masih memakai `.adw-dim`; menyelaraskannya ke `.lp-dim` adalah pekerjaan terpisah yang belum selesai — jangan dianggap sudah beres.
+**Catatan kontras (penting).** `--adw-dim-opacity: 55%` milik libadwaita berkomposisi ke **±3.2:1** di atas `window` — cukup untuk teks insidental di aplikasi, tidak cukup untuk paragraf yang diminta untuk dibaca. Karena itu landing punya `.lp-dim` (72.5% → ±5.3:1 light, ±8.9:1 dark) dan landing **tidak** memakai `.adw-dim` untuk body. Pita penutup memakai `--lp-biru-tua #1a5fb4`, bukan aksen `#3584e4`, karena white body copy hanya mencapai 6.3:1 pada langkah yang lebih gelap (3.8:1 pada aksen). Kartu hijau/oranye memakai tinta gelap `#1b1b1b` (8.6:1 dan 6.5:1). Konsol masih memakai `.adw-dim`; menyelaraskannya ke `.lp-dim` adalah pekerjaan terpisah yang belum selesai — jangan dianggap sudah beres.
 
 ## 12. Ikon
 
@@ -242,7 +277,10 @@ Regenerasi: `node /tmp/opencode/gen-ikon.mjs` — **jangan** menyunting path sec
 
 ## 13. Rujukan visual
 
-Halaman awal mengikuti densitas halaman preferensi GNOME: satu keputusan di
-atas, sedikit blok di bawahnya, tanpa nav ramai. Yang dipinjam adalah
-**ketenangan dan ritme**, bukan identitas visual: palet, tipografi, bentuk
-kontrol, dan material semuanya tetap Adwaita. Lihat `.impeccable/surfaces/src-routes-index-tsx.md` untuk direction contract halaman ini.
+Halaman awal mengikuti densitas halaman preferensi GNOME — satu keputusan di
+atas, sedikit blok di bawahnya, tanpa nav ramai — dan **warna/bentuk/gerak** ala
+Kahoot dan Wayground: blok warna jenuh, bentuk dan angka besar, tombol yang
+terasa bisa ditekan, sedikit gerak. Yang dipinjam bukan identitas visual: palet,
+tipografi, bentuk kontrol, dan material semuanya tetap Adwaita. Rujukan
+terpilih: `.impeccable/review/kahoot-desktop.png`,
+`.impeccable/review/kahoot-mobile.png`, `.impeccable/review/kahoot-desktop-dark.png`.

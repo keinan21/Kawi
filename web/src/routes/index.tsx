@@ -1,8 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { NavLanding } from '@/components/landing/NavLanding'
 import { HeroLanding } from '@/components/landing/HeroLanding'
+import { TaglineLanding } from '@/components/landing/TaglineLanding'
+import { ManfaatLanding } from '@/components/landing/ManfaatLanding'
 import { AlurNegak } from '@/components/landing/AlurNegak'
+import { FaqLanding } from '@/components/landing/FaqLanding'
 import { PenutupLanding } from '@/components/landing/PenutupLanding'
+import { Reveal } from '@/components/landing/Reveal'
 
 export const Route = createFileRoute('/')({
   component: Landing,
@@ -11,26 +14,36 @@ export const Route = createFileRoute('/')({
 /**
  * Halaman awal.
  *
- * Persuade, with a single decision point: the whole page offers ONE primary
- * action (`TombolDashboard`, identical in the header bar, the hero, and the
- * closing band) plus ONE quiet link field in the hero. Three blocks, one
- * visual anchor (the locked-session panel in the hero), one left text edge,
- * one rhythm of vertical spacing.
+ * Satu tawaran, satu audiens, satu aksi utama. Urutannya mengikuti argumen:
+ * tawarkan (hero + Sesi terkunci sebagai jangkar visual), ucapkan manfaatnya
+ * dalam satu momen besar (tagline reveal), buktikan (manfaat), jelaskan
+ * alurnya (tiga langkah + tiga tipe pertanyaan), jawab keberatannya (tanya
+ * jawab), baru minta tindakan lagi (band penutup, aksi identik).
  *
- * Rute ini mengambil shell-nya sendiri, bukan header bar `__root`, karena
- * header bar konsol Guru mengubah isinya mengikuti tampilan yang sedang dibuka
- * (HIG, Header Bars) — dan halaman ini punya navigasinya sendiri. Baris yang
- * sama tidak boleh ada dua kali di satu layar.
+ * Tidak ada header bar sendiri — bar aplikasi milik shell root, sama untuk
+ * seluruh rute. Bukti sosial sengaja tidak ada: tidak ada testimoni atau
+ * angka pelanggan nyata, dan mengarangnya dilarang. Yang ada adalah produknya
+ * sendiri, digambar hidup.
  */
 function Landing() {
   return (
-    <>
-      <NavLanding />
-      <main id="isi">
-        <HeroLanding />
+    <main>
+      <HeroLanding />
+      <Reveal>
+        <TaglineLanding />
+      </Reveal>
+      <Reveal>
+        <ManfaatLanding />
+      </Reveal>
+      <Reveal>
         <AlurNegak />
+      </Reveal>
+      <Reveal>
+        <FaqLanding />
+      </Reveal>
+      <Reveal>
         <PenutupLanding />
-      </main>
-    </>
+      </Reveal>
+    </main>
   )
 }

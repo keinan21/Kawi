@@ -26,7 +26,8 @@ import { TanggaMurid } from '@/components/murid/TanggaMurid.tsx'
 import { TimerJawaban } from '@/components/murid/TimerJawaban.tsx'
 import { ViolationCountdown } from '@/components/murid/ViolationCountdown.tsx'
 import { ZonaUnggah } from '@/components/murid/ZonaUnggah.tsx'
-import { HeaderBar, Kotak, Lencana, Pemuat, Tombol } from '@/components/adw/adw'
+import { IsiBar } from '@/components/app/BarApp'
+import { Kotak, Lencana, Pemuat, Tombol } from '@/components/adw/adw'
 import { Ikon } from '@/components/adw/ikon'
 
 export const Route = createFileRoute('/sesi/$sessionId')({
@@ -327,27 +328,31 @@ function SesiMurid() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-window">
-      <HeaderBar
+      {/* Sesi memakai bar aplikasi yang sama dengan halaman lain; ia hanya
+          mengisi slot-nya. Tack, judul, dan lencana terkunci mengisi bar yang
+          sama, begitu juga bilah tipis di bawahnya. */}
+      <IsiBar
         judul={<span className="truncate">Sesi terkunci</span>}
         awal={<TanggaMurid tahap={tahap} />}
-        aksen={
+        aksi={
           <Lencana nada="netral" ikon="gembok">
             <span className="hidden sm:inline">Terkunci</span>
             <span className="sr-only sm:hidden">Sesi terkunci</span>
           </Lencana>
         }
-      >
-        {/* Thin progress bar on the header bar's lower edge: the HIG pattern for
-            background progress. Answering is the only stage with a clock, so the
-            bar appears only when there is something left to count down. */}
-        {statusBerjalan === 'answering' && berakhir ? (
-          <TimerJawaban
-            berakhir={berakhir}
-            total={DURASI_JAWABAN_MS}
-            onHabis={onWaktuHabis}
-          />
-        ) : null}
-      </HeaderBar>
+        bawah={
+          /* Thin progress bar on the header bar's lower edge: the HIG pattern for
+             background progress. Answering is the only stage with a clock, so the
+             bar appears only when there is something left to count down. */
+          statusBerjalan === 'answering' && berakhir ? (
+            <TimerJawaban
+              berakhir={berakhir}
+              total={DURASI_JAWABAN_MS}
+              onHabis={onWaktuHabis}
+            />
+          ) : null
+        }
+      />
 
       {countdown ? (
         <ViolationCountdown

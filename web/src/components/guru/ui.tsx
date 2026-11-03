@@ -1,17 +1,15 @@
 import { useEffect, type ReactNode } from 'react'
 import { Link } from '@tanstack/react-router'
 import type { SessionStatus } from '@lms/shared'
+import { IsiBar } from '@/components/app/BarApp'
 import { Ikon } from '@/components/adw/ikon'
 import {
   Banner,
-  HeaderBar,
   Kotak,
   LabelBagian,
   Lencana,
-  PemilihGaya,
   Properti,
   Tombol,
-  TombolAkun,
   TombolKembali,
 } from '@/components/adw/adw'
 import { NadaStatus } from '@/components/adw/rel'
@@ -21,12 +19,13 @@ import { STATUS_JENDELA_LABEL, statusJendela } from './format'
 /**
  * Konsol Guru shell.
  *
- * One header bar, not two: the root shell owns the app identity and the console
- * owns the view heading. The previous layout stacked a page header and a
- * console header, so the same words appeared twice within 100 px.
+ * Tidak punya header bar sendiri. Bar aplikasi milik shell root, dan shell ini
+ * hanya mengisi slot-slotnya lewat `<IsiBar />`: judul di tengah, aksi di ujung.
+ * Sebelumnya bar konsol menumpuk di atas bar root, sehingga identitas dan
+ * pemilih gaya muncul dua kali dalam 100px.
  *
- * Reload is a first-class control because the console has no realtime channel
- * (DESIGN.md §10) — the Guru's loop is explicitly read → refresh → read.
+ * Reload adalah kontrol kelas satu karena konsol tidak punya kanal realtime
+ * (DESIGN.md §10) — alur Gurunya memang baca → muat ulang → baca.
  */
 
 export function KerangkaGuru({
@@ -52,7 +51,7 @@ export function KerangkaGuru({
 }) {
   return (
     <div className="min-h-dvh bg-window text-window-fg">
-      <HeaderBar
+      <IsiBar
         awal={kembali}
         judul={
           <span className="inline-flex min-w-0 items-center gap-2">
@@ -63,26 +62,22 @@ export function KerangkaGuru({
             <span className="min-w-0 truncate">{judul}</span>
           </span>
         }
-        aksen={
-          <>
-            {onMuatUlang ? (
-              <span className="flex items-center gap-1">
-                {dimuatAt ? (
-                  <span className="adw-caption adw-dim angka hidden md:inline">
-                    {formatMuat(dimuatAt)}
-                  </span>
-                ) : null}
-                <Tombol
-                  aria-label="Muat ulang data"
-                  title="Muat ulang data (Ctrl+R)"
-                  ikon="muatUlang"
-                  onClick={onMuatUlang}
-                />
-              </span>
-            ) : null}
-            <PemilihGaya />
-            <TombolAkun />
-          </>
+        aksi={
+          onMuatUlang ? (
+            <span className="flex items-center gap-1">
+              {dimuatAt ? (
+                <span className="adw-caption adw-dim angka hidden md:inline">
+                  {formatMuat(dimuatAt)}
+                </span>
+              ) : null}
+              <Tombol
+                aria-label="Muat ulang data"
+                title="Muat ulang data (Ctrl+R)"
+                ikon="muatUlang"
+                onClick={onMuatUlang}
+              />
+            </span>
+          ) : null
         }
       />
       {demo ? (

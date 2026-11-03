@@ -323,18 +323,22 @@
 /* --- Components ------------------------------------------------------------- */
 
 @layer components {
-  /* Header bar — the three alignment points, plus guaranteed drag space. */
+  /* Header bar — the three alignment points, plus guaranteed drag space.
+     Translucent over a blur so the content behind stays faintly visible
+     (the skill's resting nav surface), while staying one bar for every route. */
   .adw-headerbar {
-    background-color: var(--adw-headerbar-bg);
+    background-color: color-mix(in srgb, var(--adw-headerbar-bg) 82%, transparent);
     color: var(--adw-headerbar-fg);
     border-bottom: 1px solid var(--adw-shade);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .adw-heading {
-    font-size: 0.9375rem;
-    font-weight: 700;
+    font-size: 1rem;
+    font-weight: 600;
     letter-spacing: 0;
-    line-height: 1.2;
+    line-height: 1.5;
   }
 
   /* Boxed list — one card, hairline separators, 15px radius. Never a shadow
@@ -481,6 +485,25 @@
   }
   .adw-btn--quiet:hover {
     background-color: color-mix(in srgb, currentColor 8%, transparent);
+  }
+
+  /* The suggested action is the one thing a header bar may still make solid.
+     Buttons in a bar drop their background so the bar stays quiet; but "Masuk"
+     must be visible at a glance — that it exists and where it leads — so it
+     keeps the accent fill as a compact pill. */
+  .adw-btn--header-saran {
+    background-color: var(--adw-accent-bg);
+    border-color: transparent;
+    color: var(--adw-accent-fg);
+    font-weight: 700;
+    border-radius: var(--radius-control);
+    padding: 0 0.75rem;
+  }
+  .adw-btn--header-saran:hover {
+    background-color: color-mix(in srgb, var(--adw-accent-bg) 85%, black);
+  }
+  .adw-btn--header-saran:active {
+    background-color: color-mix(in srgb, var(--adw-accent-bg) 75%, black);
   }
 
   /* Circular buttons for small controls set close together. */
@@ -813,12 +836,14 @@
     }
   }
 
-  /* Vertical rhythm: one value, used by every section boundary. */
+  /* Vertical rhythm: one value, used by every section boundary. Endpoints sit
+     on the spacing scale (64px dan 96px); the fluid middle keeps sections from
+     jumping between breakpoints. */
   .lp-sek {
-    padding-block: clamp(3.5rem, 6.5vw, 6rem);
+    padding-block: clamp(4rem, 8vw, 6rem);
   }
   .lp-sek--rapat {
-    padding-block: clamp(2.75rem, 4.5vw, 4rem);
+    padding-block: clamp(2rem, 4.5vw, 3rem);
   }
 
   /* Secondary prose.
@@ -831,66 +856,79 @@
     color: color-mix(in srgb, currentColor 72.5%, transparent);
   }
   .lp-label {
-    font-size: 0.8125rem;
-    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 600;
     color: color-mix(in srgb, currentColor 72.5%, transparent);
   }
 
-  /* Display step. Tracking stops well short of the -0.04em floor. */
+  /* Display step — Heading 1 pada skala tipe skill (text-5xl → text-6xl),
+     semibold, tanpa tracking tambahan. */
   .lp-display {
-    font-size: clamp(2.125rem, 1.35rem + 3.3vw, 3.4rem);
-    line-height: 1.06;
-    letter-spacing: -0.025em;
-    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1;
+    font-weight: 600;
     text-wrap: balance;
+  }
+  @media (min-width: 40rem) {
+    .lp-display {
+      font-size: 3.75rem;
+    }
   }
 
   .lp-h2 {
-    font-size: clamp(1.5rem, 1.1rem + 1.7vw, 2.125rem);
-    line-height: 1.16;
-    letter-spacing: -0.018em;
-    font-weight: 700;
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+    font-weight: 600;
     text-wrap: balance;
+  }
+  @media (min-width: 40rem) {
+    .lp-h2 {
+      font-size: 3rem;
+      line-height: 3rem;
+    }
   }
 
   .lp-h3 {
-    font-size: 1.1875rem;
-    line-height: 1.25;
-    letter-spacing: -0.008em;
-    font-weight: 700;
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    font-weight: 600;
     text-wrap: balance;
   }
 
-  /* Measure: 65-75ch for prose, tighter for the hero lead. */
+  /* Measure: 65-75ch for prose, 680px untuk heading dan lead (aturan B5). */
   .lp-prose {
     max-width: 68ch;
     text-wrap: pretty;
   }
   .lp-lead {
-    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
-    line-height: 1.55;
-    max-width: 56ch;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 500;
+    max-width: 680px;
     text-wrap: pretty;
   }
 
-  /* The primary action at marketing scale: a pill, one per viewport. */
+  /* The primary action at marketing scale: a pill, one per viewport.
+     Button-lg pada skala tipe skill. */
   .lp-cta {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     min-height: 2.75rem;
-    padding-inline: 1.5rem;
+    padding: 0.5rem 0.75rem;
     border-radius: 9999px;
     border: 1px solid transparent;
     background-color: var(--adw-accent-bg);
     color: var(--adw-accent-fg);
-    font-size: 0.9375rem;
-    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 600;
     white-space: nowrap;
     transition:
-      background-color 120ms ease-out,
-      transform 120ms ease-out;
+      background-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
   }
   .lp-cta:hover {
     background-color: color-mix(in srgb, var(--adw-accent-bg) 85%, black);
@@ -901,44 +939,7 @@
   }
   .lp-cta--riuh {
     min-height: 3rem;
-    padding-inline: 1.875rem;
-    font-size: 1rem;
-  }
-
-  /* --- Figure chrome -------------------------------------------------------
-     The feature rows' visuals are live DOM, not screenshots: a window ground,
-     a header-bar strip with real window controls, and a body on `view`. */
-
-  .lp-figur {
-    background-color: var(--adw-view-bg);
-    color: var(--adw-view-fg);
-    border: 1px solid var(--adw-shade);
-    border-radius: var(--radius-card);
-    overflow: hidden;
-  }
-  .lp-figur__bar {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-height: 2.25rem;
-    padding-inline: 0.875rem;
-    background-color: var(--adw-headerbar-bg);
-    border-bottom: 1px solid var(--adw-shade);
-  }
-  /* Window controls are three shapes, matching the HIG's minimise/maximise/close. */
-  .lp-figur__titik {
-    width: 9px;
-    height: 9px;
-    border-radius: 9999px;
-    background-color: color-mix(in srgb, currentColor 22%, transparent);
-  }
-  .lp-figur__badan {
-    padding: 1.125rem;
-  }
-  .lp-figur__kaki {
-    padding: 0.75rem 1.125rem;
-    border-top: 1px solid var(--adw-card-shade);
-    background-color: color-mix(in srgb, currentColor 3%, transparent);
+    padding-inline: 1.5rem;
   }
 
   /* --- The one dark surface ----------------------------------------------
@@ -964,98 +965,6 @@
     background-color: var(--lp-osd-kartu);
     border: 1px solid var(--lp-osd-lembut);
     border-radius: var(--radius-control);
-  }
-
-  /* --- The round trip, horizontally ---------------------------------------
-     The Integrity Rail turned on its side: the state machine is one unbroken
-     line, reached states filled, and the auto-submit branch leaves the line. */
-
-  .lp-relai {
-    display: grid;
-    gap: 0;
-    counter-reset: langkah;
-  }
-  @media (min-width: 56rem) {
-    .lp-relai {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-  .lp-relai__simpul {
-    position: relative;
-  }
-  /* Stacked: the line runs down the left, GNOME rail style, and the copy
-     clears the node. */
-  @media (max-width: 55.999rem) {
-    .lp-relai__simpul {
-      padding: 0 0 1.75rem 1.75rem;
-    }
-    .lp-relai__simpul::before {
-      content: '';
-      position: absolute;
-      left: 0.375rem;
-      top: 0.9375rem;
-      bottom: 0;
-      width: 2px;
-      border-radius: 9999px;
-      background-color: var(--lp-relai-garis);
-    }
-    .lp-relai__simpul:last-child {
-      padding-bottom: 0;
-    }
-    .lp-relai__simpul:last-child::before {
-      content: none;
-    }
-  }
-  /* Four across: the line starts just past the node and runs to the end of
-     this column, so the next node closes the gap. No masking plate to drift. */
-  @media (min-width: 56rem) {
-    .lp-relai__simpul {
-      padding: 1.5rem 1.25rem 0 0;
-    }
-    .lp-relai__simpul::before {
-      content: '';
-      position: absolute;
-      left: 1.25rem;
-      top: 0.375rem;
-      right: 0;
-      height: 2px;
-      border-radius: 9999px;
-      background-color: var(--lp-relai-garis);
-    }
-    .lp-relai__simpul:last-child::before {
-      content: none;
-    }
-  }
-  .lp-relai__titik {
-    position: relative;
-    z-index: 1;
-    width: 0.875rem;
-    height: 0.875rem;
-    border-radius: 9999px;
-    background-color: var(--adw-accent-bg);
-    box-shadow: 0 0 0 3px var(--lp-relai-lat);
-  }
-  .lp-relai__cabang {
-    display: block;
-    margin-top: 0.875rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--radius-control);
-    background-color: color-mix(in srgb, var(--adw-warning-bg) 16%, transparent);
-    color: var(--adw-warning-fg-text);
-    font-size: 0.8125rem;
-    font-weight: 500;
-  }
-
-  /* Honest list: a claim and its consequence, hairline separated. Not a card
-     grid — a statement and its rebuttal on the same baseline. */
-  .lp-klaim {
-    display: flex;
-    gap: 0.75rem;
-    padding-block: 0.875rem;
-    border-bottom: 1px solid var(--adw-shade);
-  }
-  .lp-klaim:last-child {
-    border-bottom: 0;
   }
 
   /* Screen-reader-only, for labels the layout carries visually elsewhere. */
@@ -1092,26 +1001,225 @@
     text-decoration: underline;
     text-underline-offset: 0.1875em;
   }
+
+  /* --- The chunky button ---------------------------------------------------
+     A hard base under ONE button, so it reads as pressable rather than
+     decorative: 4px of solid colour that disappears on :active while the
+     element travels down into it. Scoped by intent — nothing else on the page
+     gets a second shadow layer, so this stays an accent, not a texture.
+     Weight caps at bold (700); the skill bans ultra-bold. */
+  .lp-chunky {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+    border-radius: 999px;
+    box-shadow: 0 4px 0 var(--lp-chunky-alas);
+    transition:
+      transform 500ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .lp-chunky:hover {
+    transform: translateY(-1px);
+  }
+  .lp-chunky:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 0 transparent;
+  }
+  /* The inverse, for use on the blue closing band. */
+  .lp-chunky--terang {
+    background-color: #ffffff;
+    color: var(--lp-biru-tua);
+    box-shadow: 0 4px 0 rgb(0 0 0 / 0.28);
+  }
+  .lp-chunky--terang:hover {
+    background-color: color-mix(in srgb, #ffffff 88%, var(--lp-biru));
+  }
+  .lp-chunky--terang:active {
+    background-color: color-mix(in srgb, #ffffff 80%, var(--lp-biru));
+  }
+
+  /* --- The hero heading, in two tones (B5) ---------------------------------
+     The one place a gradient is allowed: on heading text, never on a
+     background. Light runs #000 to #666; dark runs #FFF to #9B9B9B (B5).
+     Stops are explicit per theme — NEVER currentColor, because the color is
+     transparent and the gradient would vanish with it.
+     Fallback: without background-clip: text the heading just uses the base
+     foreground. */
+  .lp-display-hero {
+    color: var(--adw-window-fg);
+  }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .lp-display-hero {
+      background-image: linear-gradient(90deg, var(--lp-hero-tint-a), var(--lp-hero-tint-b));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  }
+
+  /* --- Scroll reveal --------------------------------------------------------
+     Sections rise 32px and fade in over 700ms on the base curve, once.
+     Triggered by IntersectionObserver (Reveal.tsx), never a scroll listener. */
+  .lp-reveal {
+    opacity: 0;
+    transform: translateY(2rem);
+    transition:
+      opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .lp-reveal--masuk {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* --- Tagline reveal (B11, mandatory) --------------------------------------
+     Each word starts at 30% opacity and reaches full opacity on its own as it
+     crosses the trigger line — the block never flips at once. */
+  .lp-tagline__kata {
+    opacity: 0.3;
+    transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .lp-tagline__kata--masuk {
+    opacity: 1;
+  }
+
+  /* --- The three question types, in shape ----------------------------------
+     Kahoot-style answer shapes, but as decoration only: each card carries its
+     type name in text, so the shape never has to carry meaning alone. */
+  .lp-kartu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    color: #ffffff;
+  }
+  .lp-kartu--biru {
+    background-color: var(--lp-biru-tua);
+  }
+  .lp-kartu--hijau {
+    background-color: var(--lp-hijau);
+    color: #1b1b1b;
+  }
+  .lp-kartu--oranye {
+    background-color: var(--lp-oranye);
+    color: #1b1b1b;
+  }
+  .lp-bentuk {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    background-color: rgb(255 255 255 / 0.9);
+  }
+  .lp-bentuk--segitiga {
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  }
+  .lp-bentuk--belah-kupat {
+    clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  }
+  .lp-bentuk--lingkaran {
+    border-radius: 999px;
+  }
+
+  /* --- The closing band, at full volume ------------------------------------
+     Deep Adwaita blue, flat (no gradient): white body copy clears 4.5:1 on the
+     darker step (6.3:1 vs 3.8:1 on --lp-biru). */
+  .lp-pita {
+    background-color: var(--lp-biru-tua);
+    color: #ffffff;
+  }
+  .lp-pita a:not([class]) {
+    color: #ffffff;
+  }
+
+  /* --- Benefits: one claim per row, hairline separated ----------------------
+     A statement and its outcome on the same baseline, not a card grid. */
+  .lp-manfaat {
+    display: flex;
+    gap: 1rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--adw-shade);
+  }
+  .lp-manfaat:last-child {
+    border-bottom: 0;
+  }
+
+  /* --- FAQ: one question per row, answer hidden until asked ----------------- */
+  .lp-faq {
+    border-bottom: 1px solid var(--adw-shade);
+  }
+  .lp-faq:last-child {
+    border-bottom: 0;
+  }
+  .lp-faq summary {
+    cursor: pointer;
+    list-style: none;
+    padding-block: 1rem;
+  }
+  .lp-faq summary::-webkit-details-marker {
+    display: none;
+  }
+  .lp-faq summary:hover {
+    background-color: color-mix(in srgb, currentColor 5%, transparent);
+  }
+  .lp-faq[open] summary {
+    background-color: color-mix(in srgb, currentColor 5%, transparent);
+  }
 }
 
-/* The round trip's own ground colours, resolved once per style. */
+/* The landing palette: Adwaita's own accent steps, taken as given. */
 :root {
-  --lp-relai-lat: var(--adw-window-bg);
-  --lp-relai-garis: color-mix(in srgb, var(--adw-window-fg) 16%, transparent);
+  --lp-biru: #3584e4;
+  --lp-biru-tua: #1a5fb4;
+  --lp-hijau: #33d17a;
+  --lp-kuning: #f6d32d;
+  --lp-oranye: #ff7800;
+  --lp-ungu: #9141ac;
+  --lp-chunky-alas: color-mix(in srgb, var(--adw-accent-bg) 55%, black);
+  --lp-hero-tint-a: #000000;
+  --lp-hero-tint-b: #666666;
 }
 :root[data-adw-style='dark'] {
-  --lp-relai-lat: #222226;
+  --lp-hero-tint-a: #ffffff;
+  --lp-hero-tint-b: #9b9b9b;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-adw-style='light']) {
-    --lp-relai-lat: #222226;
+    --lp-hero-tint-a: #ffffff;
+    --lp-hero-tint-b: #9b9b9b;
   }
 }
-:root[data-adw-style='dark'] .lp-figur {
-  --lp-relai-lat: #222226;
+
+/* Reduced motion: every reveal and activation shows its final state at once.
+   The page reads the same with movement switched off. */
+@media (prefers-reduced-motion: reduce) {
+  .lp-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .lp-tagline__kata {
+    opacity: 1;
+    transition: none;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  /* One slow breath on the hero's visual anchor. 6s, ±8px, ±1° — present
+     enough to notice once, slow enough never to compete with the read.
+     The base curve, never a browser default. */
+  .lp-float {
+    animation: lp-float 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+  @keyframes lp-float {
+    50% {
+      transform: translateY(-8px) rotate(-1deg);
+    }
+  }
+
   .adw-entrance {
     animation: adw-rise 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
@@ -1133,7 +1241,7 @@
      `both` ends on the visible state, so the element is never left hidden if a
      capture races the entrance. */
   .lp-tanya {
-    animation: lp-muncul 460ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: lp-muncul 460ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
   .lp-tanya:nth-of-type(2) {
     animation-delay: 120ms;

@@ -1,112 +1,96 @@
-import { Baris, Kotak, Lencana } from '@/components/adw/adw'
-import { Ikon } from '@/components/adw/ikon'
-
 /**
- * The round trip, as one unbroken line.
+ * Cara kerjanya, dan apa yang ditanyakan.
  *
- * This is the Integrity Rail turned on its side. It replaces the four-card
- * "how it works" block the page used to carry: a row of equal cards is the
- * category's lazy container, and it would hide the one structural fact worth
- * drawing — the states are a *sequence*, and `auto_submitted` leaves the line
- * rather than sitting on it.
+ * Tiga langkah, satu warna tiap langkah, satu angka besar tiap langkah:
+ * perjalanan pulang pergi terbaca dalam sekali pandang. Bobot ketiganya sama
+ * (Similarity) sehingga baris terbaca sebagai satu urutan, dan angka besarnya
+ * yang membawa urutan — tidak ada yang bergantung pada membaca kata-kata
+ * untuk tahu langkah mana yang lebih dulu.
+ *
+ * Di bawahnya, tiga tipe pertanyaan sebagai tiga kartu berbentuk: pembeda
+ * inti produk, diucapkan sekali. Bentuknya dekorasi saja, karena setiap kartu
+ * menyebut tipenya dalam teks — warna dan bentuk tidak pernah memikul makna
+ * sendirian.
  */
 const LANGKAH = [
   {
-    keadaan: 'Dibuat',
-    isi: 'Guru menulis perintah, format berkas, batas waktu, dan durasi Sesi.',
-    ikon: 'tDicek' as const,
+    judul: 'Guru bagikan link',
+    isi: 'Buat tugas, lalu kirim satu link ke murid.',
+    warna: 'var(--lp-biru)',
   },
   {
-    keadaan: 'Mengunggah',
-    isi: 'Murid masuk lewat link, Sesi terkunci, satu berkas dikirim. Timer belum jalan.',
-    ikon: 'unggah' as const,
+    judul: 'Murid unggah tugas',
+    isi: 'Cukup satu berkas.',
+    warna: 'var(--lp-hijau)',
   },
   {
-    keadaan: 'Menjawab',
-    isi: 'Unggahan diterima → timer 10 menit mulai. AI menyusun tiga pertanyaan dari berkas itu.',
-    ikon: 'pertanyaan' as const,
-  },
-  {
-    keadaan: 'Terkumpul',
-    isi: 'Jawaban masuk, Penilaian AI berjalan di belakang, riwayatnya tersimpan untuk Guru.',
-    ikon: 'daftar' as const,
+    judul: 'Murid jawab 3 pertanyaan',
+    isi: 'Disusun dari isi tugasnya sendiri.',
+    warna: 'var(--lp-oranye)',
   },
 ]
 
 const TIPE_TANYA = [
   {
     tipe: 'Ideasi',
-    isi: 'Dari ide apa karya ini berangkat, dan apa yang diubah darinya.',
+    isi: 'Dari ide apa karya ini berangkat, dan apa yang diubah dari ide itu.',
+    warna: 'lp-kartu--biru',
+    bentuk: 'lp-bentuk--segitiga',
   },
   {
     tipe: 'Isi',
     isi: 'Bagian mana yang paling dikerjakan sendiri, dan mengapa.',
+    warna: 'lp-kartu--hijau',
+    bentuk: 'lp-bentuk--belah-kupat',
   },
   {
     tipe: 'Harapan',
     isi: 'Kalau karya ini dilanjutkan, siapa yang paling terbantu.',
+    warna: 'lp-kartu--oranye',
+    bentuk: 'lp-bentuk--lingkaran',
   },
 ]
 
 export function AlurNegak() {
   return (
     <section id="alur" className="lp-jangkar lp-shell lp-sek border-t border-shade">
-      <h2 className="lp-h2">Empat keadaan, satu garis</h2>
-      <p className="lp-prose mt-3 lp-dim">
-        Sesi tidak punya tombol “batal” dan tidak punya jalan tengah. Ia bergerak
-        maju, atau keluar dari garis di satu tempat saja.
-      </p>
+      <h2 className="lp-h2">Cara kerjanya</h2>
 
-      <ol className="lp-relai mt-10 m-0 list-none p-0">
-        {LANGKAH.map((l) => (
-          <li key={l.keadaan} className="lp-relai__simpul">
-            <span className="lp-relai__titik block" aria-hidden="true" />
-            <div className="mt-4 flex items-center gap-2">
-              <Ikon nama={l.ikon} ukuran={16} className="flex-none text-accent-text" />
-              <h3 className="lp-h3 m-0">{l.keadaan}</h3>
-            </div>
-            <p className="lp-dim mt-1.5 text-[0.9375rem] leading-relaxed text-pretty">
-              {l.isi}
-            </p>
+      <ol className="m-0 mt-8 grid list-none gap-6 p-0 sm:grid-cols-3">
+        {LANGKAH.map((l, i) => (
+          <li key={l.judul} className="min-w-0">
+            <span
+              aria-hidden="true"
+              className="grid size-10 place-items-center rounded-full text-base font-bold text-white"
+              style={{ backgroundColor: l.warna }}
+            >
+              {i + 1}
+            </span>
+            <h3 className="lp-h3 mt-3">{l.judul}</h3>
+            <p className="lp-dim mt-2 text-base leading-6 text-pretty">{l.isi}</p>
           </li>
         ))}
       </ol>
 
-      {/* The branch. It leaves the line, and it is the only exit that does. */}
-      <p className="mt-6 inline-flex flex-wrap items-center gap-2 rounded-control bg-[color-mix(in_srgb,var(--adw-warning-bg)_14%,transparent)] px-3 py-2 text-[0.875rem] text-pretty text-warning-text">
-        <Ikon nama="peringatan" ukuran={15} className="flex-none" />
-        <span>
-          <span className="font-bold">Dihidup otomatis</span> — Pelanggaran yang
-          diabaikan, atau timer yang habis. Sesi terkirim tanpa Penilaian AI,
-          karena jawaban parsial bukan sinyal pemahaman.
-        </span>
+      <h2 className="lp-h2 mt-16 sm:mt-20">Tiga pertanyaan, satu dari tiap tipe</h2>
+      <p className="lp-prose lp-dim mt-2 text-base">
+        Ditanyakan dari isi tugas Murid sendiri, masing-masing dengan kutipan
+        yang bisa Guru cek langsung.
       </p>
 
-      {/* The product's core differentiator, compressed to one boxed list: three
-          rows, identical treatment, one left edge (Similarity + Continuity).
-          The hero's panel already shows these questions; here they are stated
-          as the rule behind them. */}
-      <div className="mt-12 lg:mt-16">
-        <h3 className="lp-h3">Tiga pertanyaan, satu dari tiap tipe</h3>
-        <p className="lp-prose lp-dim mt-2">
-          AI membaca berkas yang diunggah, lalu menyusun satu Pertanyaan
-          Ideasi, satu Isi, dan satu Harapan. Tiap pertanyaan membawa kutipan
-          persis dari dokumen — dicek sebagai substring sebelum dikirim, dan
-          diperbaiki bila tidak cocok.
-        </p>
-        <Kotak dibingkai className="lp-prose mt-5">
-          {TIPE_TANYA.map((t) => (
-            <Baris key={t.tipe}>
-              <Lencana nada="aksen" ikon="pertanyaan" className="flex-none">
-                {t.tipe}
-              </Lencana>
-              <span className="min-w-0 flex-1 text-[0.9375rem] leading-relaxed text-pretty">
+      <ul className="m-0 mt-6 grid list-none gap-3 p-0 sm:grid-cols-3">
+        {TIPE_TANYA.map((t) => (
+          <li key={t.tipe} className={`lp-kartu ${t.warna}`}>
+            <span aria-hidden="true" className={`lp-bentuk ${t.bentuk}`} />
+            <span className="min-w-0">
+              <span className="block text-lg font-bold leading-7">{t.tipe}</span>
+              <span className="mt-1 block text-sm leading-5 text-pretty opacity-90">
                 {t.isi}
               </span>
-            </Baris>
-          ))}
-        </Kotak>
-      </div>
+            </span>
+          </li>
+        ))}
+      </ul>
     </section>
   )
 }

@@ -82,22 +82,6 @@ export function TombolKembali({
   )
 }
 
-/** Account entry point at the end of the header bar. */
-export function TombolAkun({ nama }: { nama?: string }) {
-  return (
-    <button
-      type="button"
-      className="adw-btn adw-btn--header"
-      aria-label={nama ? `Akun: ${nama}` : 'Akun'}
-    >
-      <Ikon nama="orang" />
-      <span className="hidden max-w-28 truncate text-[0.875rem] md:inline">
-        {nama ?? 'Akun'}
-      </span>
-    </button>
-  )
-}
-
 /* --- Buttons --------------------------------------------------------------- */
 
 type GayaTombol = 'biasa' | 'usang' | 'saran' | 'merusak' | 'pill' | 'sirkular'
